@@ -22,7 +22,7 @@ public class Project {
     private Date start_date;
     private Date end_date;
 
-
+    //With internal callbacks(PrePersist, PreUpdata)
     private Date created_At;
     private Date updated_At;
 
