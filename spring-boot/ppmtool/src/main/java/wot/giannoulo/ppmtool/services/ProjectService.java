@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.ScriptAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wot.giannoulo.ppmtool.domain.Project;
+import wot.giannoulo.ppmtool.exceptions.ProjectIdException;
 import wot.giannoulo.ppmtool.repositories.ProjectRepository;
 
 /**
@@ -17,11 +18,15 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    public Project saveOrUpdateProject(Project project){
+    public Project saveOrUpdateProject(Project project) {
 
-        //logic
-        return projectRepository.save(project);
+        try {
+            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            return projectRepository.save(project);
+
+        }catch (Exception e) {
+            throw new ProjectIdException("Project ID '" + project.getProjectIdentifier().toUpperCase() + "'already exists");
+        }
     }
-
-
 }
+
