@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import wot.giannoulo.ppmtool.domain.Project;
+import wot.giannoulo.ppmtool.services.MapValidationErrorService;
 import wot.giannoulo.ppmtool.services.ProjectService;
 
 import javax.validation.Valid;
+import javax.xml.ws.Response;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
@@ -30,19 +32,15 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private MapValidationErrorService mapValidationErrorService;
+
     @PostMapping("")
     public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result){
 
-        if(result.hasErrors()){
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if(errorMap!=null) return errorMap;
 
-            Map<String, String> errorMap = new HashMap<>();
-
-            for(FieldError error: result.getFieldErrors()){
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-
-            return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
-        }
         projectService.saveOrUpdateProject(project);
 
         return new ResponseEntity<Project>(project, HttpStatus.CREATED);
