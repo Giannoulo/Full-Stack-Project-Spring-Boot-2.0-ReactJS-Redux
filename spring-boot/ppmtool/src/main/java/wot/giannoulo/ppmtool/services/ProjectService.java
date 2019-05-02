@@ -18,6 +18,8 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+
+
     public Project saveOrUpdateProject(Project project) {
 
         try {
@@ -28,6 +30,8 @@ public class ProjectService {
             throw new ProjectIdException("Project ID '" + project.getProjectIdentifier().toUpperCase() + "'already exists");
         }
     }
+
+
 
     public Project findProjectByIdentifier(String projectId){
 
@@ -40,8 +44,21 @@ public class ProjectService {
         return project;
     }
 
+
+
     public Iterable<Project> findAllProjects(){
         return projectRepository.findAll();
+    }
+
+
+
+    public void deleteProjectByIdentifier(String projectid){
+        Project project = projectRepository.findByProjectIdentifier(projectid.toUpperCase());
+
+        if(project == null){
+            throw new ProjectIdException("Cannot delete project with ID "+projectid+". This project does not exist.");
+        }
+        projectRepository.delete(project);
     }
 }
 
