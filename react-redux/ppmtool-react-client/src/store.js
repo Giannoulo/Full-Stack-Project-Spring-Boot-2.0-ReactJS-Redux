@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
-import rootReducer from "./reducers";
+import rootReducer from "./reducers"; // <-------------------------------with index or not?????
 
 const initialState = {};
 
@@ -12,6 +12,7 @@ if (window.navigator.userAgent.includes("Chrome")) {
   store = createStore(
     rootReducer,
     initialState,
+    // compose is used when multiple enhancers are present
     compose(
       applyMiddleware(...middleware),
       window.__REDUX_DEVTOOLS_EXTENSION__ &&
