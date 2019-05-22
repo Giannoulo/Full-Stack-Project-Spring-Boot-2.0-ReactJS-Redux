@@ -37,6 +37,7 @@ public class Project {
 
     //With internal callbacks(PrePersist, PreUpdate)
     @JsonFormat(pattern = "yyyy-mm-dd")
+    @Column(updatable = false)
     private Date created_At;
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
